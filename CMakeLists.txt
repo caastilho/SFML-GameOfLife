@@ -17,6 +17,7 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/others/bin)
 file (GLOB source_files 
     ${CMAKE_SOURCE_DIR}/source/engine/*.cpp
     ${CMAKE_SOURCE_DIR}/source/game/*.cpp
+    ${CMAKE_SOURCE_DIR}/source/game/board/*.cpp
     ${CMAKE_SOURCE_DIR}/source/*.cpp
     )
 

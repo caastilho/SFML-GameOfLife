@@ -6,7 +6,7 @@ std::vector<std::vector<int>> getPattern(std::string name)
 {
     
     std::vector<std::vector<int>> matrix;
-    std::string path = "/home/alfa/Desktop/C++/GameOfLife/source/game/patterns/";
+    std::string path = "/home/alfa/Desktop/C++/GameOfLife/source/game/board/patterns/";
     
     // Open input file
     std::string line;

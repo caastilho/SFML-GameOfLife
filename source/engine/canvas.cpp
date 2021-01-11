@@ -6,33 +6,35 @@
 Canvas::Canvas(int width, int height, const char* title) 
 {
     
-    CANVAS_width = width;
-    CANVAS_height = height;
-    
-    // Create 'RenderWindow' requirements
-    sf::VideoMode shape(width, height);
-    int style = sf::Style::Close | sf::Style::Resize;
-
     // Create 'RenderWindow' object
-    CANVAS_window = new sf::RenderWindow(shape, title, style);
+    CANVAS_window = new sf::RenderWindow();
     
+    // Set window attributes
+    CANVAS_window->setPosition(sf::Vector2i(0, 0));
+    
+    sf::VideoMode shape(width, height);
+    int style = sf::Style::Close | sf::Style::Titlebar;
+    CANVAS_window->create(shape, title, style);
+    
+    // Set window size
+    sf::Vector2u size = CANVAS_window->getSize(); 
+    CANVAS_width  = size.x;
+    CANVAS_height = size.y;
 }
 
 
 // Run canvas environment
-void Canvas::Run()
+void Canvas::run()
 {
     
-    sf::Event action;
-    
     // Setup simulation environment
-    Setup();
+    setup();
     
     // Main window loop
     while (CANVAS_window->isOpen())
     {
-        HandleEvents(action);
-        Loop();
+        handleEvents(CANVAS_event);
+        loop();
         
         // Display window changes
         CANVAS_window->display();
@@ -41,24 +43,19 @@ void Canvas::Run()
     
 }
 
-
 // Handle window events
-void Canvas::HandleEvents(sf::Event& action)
+void Canvas::handleEvents(sf::Event& action)
 {
     
     while (CANVAS_window->pollEvent(action)) 
     {
-        switch (action.type) 
-        {
-            case sf::Event::Closed: // Quit environment
-                Exit();
-                break;
-                
-            case sf::Event::Resized: // Resize window
-                break;
-                
-        }
         
+        // Close window if event 'Closed' is detected
+        if (action.type == sf::Event::Closed)
+            exit();
+        
+        // Simulation event handler
+        events(action);
         
     }
     
@@ -66,10 +63,8 @@ void Canvas::HandleEvents(sf::Event& action)
 }
 
 // Quit environment
-void Canvas::Exit()
+void Canvas::exit()
 {
     
     CANVAS_window->close();
-    Clean();
-    
 }
