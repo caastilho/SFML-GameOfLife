@@ -55,3 +55,29 @@ void Camera::updateXY(float deltaX, float deltaY)
     y += deltaY * y_scaler;
 
 }
+
+// Update camera zoom
+void Camera::updateZoom(float delta, float amount)
+{
+    zoom += delta * amount;
+}
+
+
+// Constrain X value
+void Camera::constrainX(float minimum, float maximum)
+{
+    x = std::min(maximum, std::max(minimum, x));
+}
+
+// Constrain Y value 
+void Camera::constrainY(float minimum, float maximum)
+{
+    y = std::min(maximum, std::max(minimum, y));
+}
+
+// Constrain zoom
+void Camera::constrainZoom(float minimum, float maximum)
+{
+    zoom = std::min(maximum, std::max(minimum, zoom));
+}
+

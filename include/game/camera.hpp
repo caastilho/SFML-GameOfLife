@@ -17,6 +17,11 @@ struct Camera
     
     // Update values
     void updateXY(float deltaX, float deltaY);
+    void updateZoom(float delta, float amount);
     
+    // Constrain values
+    void constrainX(float minimum, float maximum);
+    void constrainY(float minimum, float maximum);
+    void constrainZoom(float minimum, float maximum);
     
 };

@@ -1,6 +1,4 @@
 #include "game/board.hpp"
-#include <iostream>
-#define log(x, y) std::cout << x << y << "\n";
 
 
 // Setup board environment
@@ -27,7 +25,8 @@ void Board::set(int _width, int _height, sf::RenderWindow* _canvas)
     
     // Setup cell size
     shape.setOutlineThickness(1);
-    shape.setOutlineColor(sf::Color(55, 55, 55));
+    shape.setOutlineColor(sf::Color(0, 0, 0));
+    shape.setFillColor(sf::Color(255, 255, 255));
     
     // Setup matrix values
     setupMatrix();
@@ -239,21 +238,14 @@ void Board::drawStates(float startX, float startY, float width, float height, fl
             if (isYValid && isXValid)
             {
             
-                // Dead cell color
-                if (!matrix[y][x]) 
+                // Draw cell if is alive
+                if (matrix[y][x])
                 {
-                    shape.setFillColor(sf::Color(0, 0, 0));
+                    // Draw shape
+                    shape.setPosition((x - startX) * scaler, (y - startY) * scaler);
+                    canvas->draw(shape);
                 }
                 
-                // Alive cell color
-                else if (matrix[y][x])
-                {
-                    shape.setFillColor(sf::Color(255, 255, 255));
-                }
-                
-                // Draw shape
-                shape.setPosition((x - startX) * scaler, (y - startY) * scaler);
-                canvas->draw(shape);
             }
         }
 }
