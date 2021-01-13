@@ -162,13 +162,6 @@ int Board::getNeighbours(int y, int x)
 void Board::doGeneration()
 {
     
-    // Create check if it is not created
-    if (!isCheckCreated)
-    {
-        setupCheck();
-        isCheckCreated = true;
-    }
-    
     copied = matrix;
     std::vector<sf::Vector2u> oldCheck = check;
     check.clear();
@@ -217,6 +210,15 @@ void Board::doGeneration()
 // Draw cells on the canvas
 void Board::drawStates(float startX, float startY, float width, float height, float scaler)
 {
+    
+    // Create check if it is not created
+    if (!isCheckCreated)
+    {
+        setupCheck();
+        isCheckCreated = true;
+    }
+    
+    // Get coordinates
     int stopY_index = startY + ceil((height / scaler));
     int stopX_index = startX + ceil((width / scaler));
     
@@ -227,27 +229,29 @@ void Board::drawStates(float startX, float startY, float width, float height, fl
     shape.setSize(sf::Vector2f(scaler, scaler)); 
 
     // Iterate thru matrix dimensions
-    for (int y=startY_index; y <= stopY_index; y++)
-        for (int x=startX_index; x < stopX_index; x++)
+    for (sf::Vector2u& coordinate : check)
+    {
+        
+        int y = coordinate.y;
+        int x = coordinate.x;
+        
+        // Validate coordinates
+        bool isYValid = y >= startY_index && y < stopY_index;
+        bool isXValid = x >= startX_index && x < stopX_index;
+        
+        if (isYValid && isXValid)
         {
-            
-            // Validate coordinates
-            bool isYValid = y >= 0 && y < matrix.size();
-            bool isXValid = x >= 0 && x < matrix[0].size();
-            
-            if (isYValid && isXValid)
+        
+            // Draw cell if is alive
+            if (matrix[y][x])
             {
-            
-                // Draw cell if is alive
-                if (matrix[y][x])
-                {
-                    // Draw shape
-                    shape.setPosition((x - startX) * scaler, (y - startY) * scaler);
-                    canvas->draw(shape);
-                }
-                
+                // Draw shape
+                shape.setPosition((x - startX) * scaler, (y - startY) * scaler);
+                canvas->draw(shape);
             }
+            
         }
+    }
 }
 
 

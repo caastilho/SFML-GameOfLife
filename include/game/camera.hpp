@@ -11,8 +11,8 @@ struct Camera
     
     // Construct camera environment
     Camera();
-    Camera(float startX, float startY);
-    void set(float startX, float startY);
+    Camera(float startX, float startY, float startZoom);
+    void set(float startX, float startY, float startZoom);
     
     
     // Update values

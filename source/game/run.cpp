@@ -1,8 +1,11 @@
 #include <engine/canvas.hpp>
+
+#include <string>
+#include <limits.h>
+#include <unistd.h>
+
 #include "game/board.hpp" 
 #include "game/camera.hpp"
-
-// #include <cmath>
 
 
 static Board board;
@@ -11,26 +14,53 @@ static int height = 1000;
 
 static Camera camera;
 static float maxZoom = 0;
-static float maxX = 0;
-static float maxY = 0;
+
+static sf::Font retroFont;
+static sf::Text paused;
+static bool running = false;
 
 
 // Handle camera transformations
 void handleCamera(int CANVAS_width, int CANVAS_height)
 {
-    // Update X and Y camera axis
-    camera.updateXY(1.2, 1.2);
 
     // Constrain zoom
     camera.constrainZoom(maxZoom, 0.5);
     float zoom = camera.zoom * 100;
 
+    // Update X and Y camera axis
+    camera.updateXY(6 / zoom, 6 / zoom);
+    
     // Constrain coordinates
-    maxX = width - (CANVAS_width / zoom);
-    maxY = height - (CANVAS_height / zoom);
+    int maxX = width - (CANVAS_width / zoom);
+    int maxY = height - (CANVAS_height / zoom);
     camera.constrainX(0, maxX);
     camera.constrainY(0, maxY);    
 }
+
+
+// Setup Writer fonts
+void setupPaused(int width, int height)
+{
+    
+    // Get 'Retro font path'
+    char result[PATH_MAX];
+    size_t count = readlink("/proc/self/exe", result, PATH_MAX);
+    std::string full_path = std::string(result, (count > 0) ? count : 0);
+    std::string path = full_path.substr(0, full_path.size() - 7) + "assets/retro.ttf";
+    
+    // Create Retro font
+    retroFont.loadFromFile(path);
+    
+    // Create text object
+    paused.setString("Paused");
+    paused.setFont(retroFont);
+    paused.setCharacterSize(50);
+    paused.setPosition(10, height - 100);
+    paused.setFillColor(sf::Color(255, 255, 255));
+    
+}
+
 
 
 // Setup simulation environment
@@ -42,8 +72,11 @@ void Canvas::setup()
     board.add("gosper_glider_gun", width/2, height/2);
     
     // Set camera initial values
-    camera.set(width/2, height/2);
+    camera.set(width/2, height/2, 0.3);
     maxZoom = ((float)CANVAS_width / width) / 100.0;
+    
+    // Setup text 'Paused' environment
+    setupPaused(CANVAS_width, CANVAS_height);
     
 }
 
@@ -63,7 +96,17 @@ void Canvas::loop()
     float y = camera.y;
     
     // Run simulation
-    board.doGeneration();
+    if (running)
+    {
+        board.doGeneration();
+    }
+    
+    else
+    {
+        CANVAS_window->draw(paused);
+    }
+    
+    // Draw simulation
     board.drawStates(x, y, CANVAS_width, CANVAS_height, zoom);
 
 }
@@ -78,4 +121,12 @@ void Canvas::events(sf::Event& action)
         float increment = 0.08 * camera.zoom;
         camera.updateZoom(action.mouseWheel.delta, increment);
     }
+    
+    // Pause or Play simulation
+    if (action.type == sf::Event::KeyPressed)
+    {
+        if (action.key.code == sf::Keyboard::Space)
+            running = !running;
+    }
+    
 }

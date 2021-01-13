@@ -9,18 +9,18 @@ Camera::Camera()
     zoom = 0;
 }
 
-Camera::Camera(float startX, float startY)
+Camera::Camera(float startX, float startY, float startZoom)
 {
     x = startX;
     y = startY;
-    zoom = 1;
+    zoom = startZoom;
 }
 
-void Camera::set(float startX, float startY)
+void Camera::set(float startX, float startY, float startZoom)
 {
     x = startX;
     y = startY;
-    zoom = 1;
+    zoom = startZoom;
 }
 
 
@@ -33,21 +33,21 @@ void Camera::updateXY(float deltaX, float deltaY)
     
     // Y-AXIS TRANSLATIONS
     // Up key is being pressed
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) 
         y_scaler = -1;
     
     // Down key is being pressed
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         y_scaler = 1;
     
     
     // X-AXIS TRANSLATIONS
-    // Right key is being pressed
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    // Left key is being pressed
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         x_scaler = -1;
     
-    // Left key is being pressed
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    // Right key is being pressed
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         x_scaler = 1;
     
     // Update coordinates
