@@ -1,37 +1,17 @@
-#include "game/board.hpp"
+#include <Body/board.hpp>
+#include <iostream>
 
 
 // Setup board environment
-Board::Board()
+Board::Board(int _width, int _height, sf::RenderWindow* _window): width(_width), height(_height), window(_window)
 {
-    canvas = nullptr;
-    width = 0;
-    height = 0;
     
     // Setup cell size
-    shape.setSize(sf::Vector2f(0, 0));
-}
-
-Board::Board(int _width, int _height, sf::RenderWindow* _canvas)
-{
-    set(_width, _height, _canvas);
-}
-
-void Board::set(int _width, int _height, sf::RenderWindow* _canvas)
-{
-    canvas = _canvas;
-    width = _width;
-    height = _height;
-    
-    // Setup cell size
-    shape.setOutlineThickness(1);
-    shape.setOutlineColor(sf::Color(0, 0, 0));
     shape.setFillColor(sf::Color(255, 255, 255));
     
     // Setup matrix values
     setupMatrix();
 }
-
 
 
 
@@ -190,7 +170,6 @@ void Board::doGeneration()
         }
 
         // Kill cell by default (Overpopulation or Isolation)
-        // or maintain dead state
         else
         {
             value = 0;
@@ -208,7 +187,7 @@ void Board::doGeneration()
 }
 
 // Draw cells on the canvas
-void Board::drawStates(float startX, float startY, float width, float height, float scaler)
+void Board::drawStates()
 {
     
     // Create check if it is not created
@@ -218,38 +197,20 @@ void Board::drawStates(float startX, float startY, float width, float height, fl
         isCheckCreated = true;
     }
     
-    // Get coordinates
-    int stopY_index = startY + ceil((height / scaler));
-    int stopX_index = startX + ceil((width / scaler));
-    
-    int startY_index = floor(startY);
-    int startX_index = floor(startX);
-
     // Resize shape
     shape.setSize(sf::Vector2f(scaler, scaler)); 
 
-    // Iterate thru matrix dimensions
+    // Draw alive cells
     for (sf::Vector2u& coordinate : check)
     {
         
-        int y = coordinate.y;
         int x = coordinate.x;
+        int y = coordinate.y;
         
-        // Validate coordinates
-        bool isYValid = y >= startY_index && y < stopY_index;
-        bool isXValid = x >= startX_index && x < stopX_index;
-        
-        if (isYValid && isXValid)
+        if (matrix[y][x])
         {
-        
-            // Draw cell if is alive
-            if (matrix[y][x])
-            {
-                // Draw shape
-                shape.setPosition((x - startX) * scaler, (y - startY) * scaler);
-                canvas->draw(shape);
-            }
-            
+            shape.setPosition(x * scaler, y * scaler);
+            window->draw(shape);
         }
     }
 }
@@ -257,13 +218,10 @@ void Board::drawStates(float startX, float startY, float width, float height, fl
 
 
 // Add pattern to matrices
-void Board::add(const char* name, int startX, int startY)
-{
-    std::vector<std::vector<int>> pattern = getPattern(name);
-    
+void Board::add(std::vector<std::vector<int>> pattern, int startX, int startY)
+{    
     // Add pattern to main matrix
     for (int y=0; y < pattern.size(); y++)
         for (int x=0; x < pattern[0].size(); x++)
-            matrix[startY + y][startX + x] = pattern[y][x];
-    
+            matrix[startY + y][startX + x] = pattern[y][x];    
 }

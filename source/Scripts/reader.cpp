@@ -1,17 +1,16 @@
-#include "game/reader.hpp"
+#include <Scripts/reader.hpp>
 
 
 // Convert .cell files to Conway's Game Of Life patterns (Matrix)
-std::vector<std::vector<int>> getPattern(std::string name)
+std::vector<std::vector<int>> getPattern(std::string path)
 {
     
     std::vector<std::vector<int>> matrix;
-    std::string path = "/home/alfa/Desktop/C++/GameOfLife/source/game/board/patterns/";
     
     // Open input file
     std::string line;
     std::ifstream file;
-    file.open(path + name + ".cell");
+    file.open(path);
     
     // Get lines from file
     while (file)

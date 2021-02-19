@@ -1,11 +1,14 @@
-#include <engine/canvas.hpp>
+#include <Graphics/canvas.hpp>
 
 
-// Main project entry-point
+// Main entry-point
 int main(int argc, char* argv[])
 {
     
+    // Setup canvas object
     Canvas canvas(1920, 1080, "Cellular Automata");
+    
+    // Run canvas environment
     canvas.run();
     
     // Exit C++ environment

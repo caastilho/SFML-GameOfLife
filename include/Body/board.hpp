@@ -1,5 +1,4 @@
 #pragma once
-#include "game/reader.hpp"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <vector>
@@ -10,39 +9,49 @@ class Board
 {
     
     private:
-        sf::RenderWindow* canvas;
-        int width;
-        int height;
+        
+        sf::RenderWindow* window;
+        int width, height;
+        float scaler = 10;
+        
         
         // Cell's shape
         sf::RectangleShape shape;
 
-        // Cell's states. Stored inside 2D matrices
+
+        // Stores "check" matrix created state
         bool isCheckCreated = false;
         
+        // Cell's states. Stored inside 2D matrices
         std::vector<sf::Vector2u> check;
         std::vector<std::vector<int>> matrix;
         std::vector<std::vector<int>> copied;
         
-        // Setup matrix
+        // Setup matrices
         void setupMatrix();
         void setupCheck();
         void addToCheck(int y, int x);
         
+        
         // Get neighbouring cells
         int getNeighbours(int y, int x);
 
+
     public: 
+        
+        // Default board constructor
+        Board() {};
+        
+        // Board constructor
+        Board(int _width, int _height, sf::RenderWindow* _window);
+        
         
         // Run simulation
         void doGeneration();
-        void drawStates(float startX, float startY, float width, float height, float scaler);
+        void drawStates();
         
-        // Construct environment
-        void set(int _width, int _height, sf::RenderWindow* _canvas);
-        Board(int _width, int _height, sf::RenderWindow* _canvas);
-        Board();
+        
         
         // Pattern management
-        void add(const char* name, int startX, int startY);    
+        void add(std::vector<std::vector<int>> pattern, int startX, int startY);    
 };
