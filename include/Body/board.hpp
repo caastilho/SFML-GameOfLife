@@ -48,10 +48,18 @@ class Board
         
         // Run simulation
         void doGeneration();
+        
+        // Draw cell's states
         void drawStates();
         
         
+        // Get cell scaler without transformation
+        float getScaler();
         
+    
         // Pattern management
-        void add(std::vector<std::vector<int>> pattern, int startX, int startY);    
+        void add(std::vector<std::vector<int>> pattern, int startX, int startY);
+        
+        // Change cell state
+        void updateCell(int x, int y, int newState);
 };

@@ -1,7 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+
 #include <Body/board.hpp>
 #include <Body/camera.hpp>
+#include <Scripts/editor.hpp>
 
 
 // Scene simulation
@@ -17,14 +19,18 @@ class SCENE_Simulation
         bool isFocused;
         
         
-        // Simulation state
+        // Simulation states
         bool isSimulationActive = false;
+        
+        
+        // Simulation camera
+        Camera2D camera;
         
         // Game of life board
         Board board;
         
-        // Simulation camera
-        Camera2D camera;
+        // Game of life board editor
+        Editor editor;
     
     
     public:

@@ -7,7 +7,7 @@ Board::Board(int _width, int _height, sf::RenderWindow* _window): width(_width),
 {
     
     // Setup cell size
-    shape.setFillColor(sf::Color(255, 255, 255));
+    shape.setFillColor(sf::Color(225, 225, 255));
     
     // Setup matrix values
     setupMatrix();
@@ -216,12 +216,26 @@ void Board::drawStates()
 }
 
 
+// Get cell scaler without transformation
+float Board::getScaler()
+{
+    return scaler;
+}
+
 
 // Add pattern to matrices
 void Board::add(std::vector<std::vector<int>> pattern, int startX, int startY)
-{    
+{
     // Add pattern to main matrix
     for (int y=0; y < pattern.size(); y++)
         for (int x=0; x < pattern[0].size(); x++)
             matrix[startY + y][startX + x] = pattern[y][x];    
+}
+
+// Change cell state
+void Board::updateCell(int x, int y, int newState)
+{
+    matrix[y][x] = newState;
+    if (newState)
+        addToCheck(y, x);
 }
