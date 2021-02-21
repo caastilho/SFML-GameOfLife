@@ -27,6 +27,6 @@ class Camera2D
         
         // Update transformation
         void updateView(float offset, bool isFocused);
-        void updateView(sf::Event& action);
+        void updateView(sf::Event& action, bool isFocused);
 
 };

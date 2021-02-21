@@ -13,19 +13,27 @@ void Editor::edit(sf::Event& action)
         if (action.mouseButton.button == sf::Mouse::Left)
         {
             sf::Vector2i position = getTruePosition(action.mouseButton.x, action.mouseButton.y);
-            bornCell(position.x, position.y);
+            if (isInBonderies(position.x, position.y))
+                bornCell(position.x, position.y);
         }
         
         // Right mouse button release
         if (action.mouseButton.button == sf::Mouse::Right)
         {
             sf::Vector2i position = getTruePosition(action.mouseButton.x, action.mouseButton.y);
-            killCell(position.x, position.y);
+            if (isInBonderies(position.x, position.y))
+                killCell(position.x, position.y);
         }
         
     }
 }
 
+
+// Check if index is within bonderies
+bool Editor::isInBonderies(int x, int y)
+{
+    return (0 <= x && x < board->width) && (0 <= y && y < board->height);
+}
 
 
 // Get X, Y board position based on view and cursor X, Y
@@ -37,9 +45,8 @@ sf::Vector2i Editor::getTruePosition(float x, float y)
     sf::Vector2f worldPosition = window->mapPixelToCoords(windowPosition);
     
     // Convert world position to board indexes
-    float cellSize = board->getScaler();
-    int indexX = (int)(worldPosition.x / cellSize);
-    int indexY = (int)(worldPosition.y / cellSize);
+    int indexX = (int)(worldPosition.x / board->scaler);
+    int indexY = (int)(worldPosition.y / board->scaler);
     
     // Change cell state
     return sf::Vector2i(indexX, indexY);

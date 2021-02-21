@@ -10,14 +10,18 @@ class Board
     
     private:
         
-        sf::RenderWindow* window;
-        int width, height;
-        float scaler = 10;
-        
+        sf::RenderWindow* window;        
         
         // Cell's shape
         sf::RectangleShape shape;
-
+        
+        
+        // Draw grid lines
+        bool drawGridLines = true;
+        
+        // Grid line shape object
+        sf::RectangleShape gridLine;
+        
 
         // Stores "check" matrix created state
         bool isCheckCreated = false;
@@ -39,6 +43,13 @@ class Board
 
     public: 
         
+        // Board dimensions
+        int width, height;
+        
+        // Board cell's size
+        float scaler = 10;
+        
+        
         // Default board constructor
         Board() {};
         
@@ -49,12 +60,8 @@ class Board
         // Run simulation
         void doGeneration();
         
-        // Draw cell's states
-        void drawStates();
-        
-        
-        // Get cell scaler without transformation
-        float getScaler();
+        // Draw board
+        void display();
         
     
         // Pattern management

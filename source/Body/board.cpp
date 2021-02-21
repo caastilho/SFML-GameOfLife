@@ -6,8 +6,11 @@
 Board::Board(int _width, int _height, sf::RenderWindow* _window): width(_width), height(_height), window(_window)
 {
     
-    // Setup cell size
+    // Setup cell attributes
     shape.setFillColor(sf::Color(225, 225, 255));
+    
+    // Setup grid line attributes
+    gridLine.setFillColor(sf::Color(20, 20, 20));
     
     // Setup matrix values
     setupMatrix();
@@ -25,18 +28,10 @@ void Board::setupMatrix()
     
     // Create rows
     for (int y=0; y < height; y++)
-    {
-        
-        // Create row object
-        std::vector<int> row(width);
-        matrix.push_back(row);
-        
-        // Create columns
         for (int x=0; x < width; x++)
         {
             matrix[y].push_back(0);
         }
-    }
 }
 
 void Board::setupCheck()
@@ -66,8 +61,8 @@ void Board::addToCheck(int y, int x)
             unsigned int xValue = x + dx;
             
             // Validate coordinates
-            bool isYValid = yValue > 0 && yValue < matrix.size();
-            bool isXValid = xValue > 0 && xValue < matrix[0].size();
+            bool isYValid = yValue >= 0 && yValue < matrix.size();
+            bool isXValid = xValue >= 0 && xValue < matrix[0].size();
             
             if (isYValid && isXValid)
             {
@@ -120,15 +115,9 @@ int Board::getNeighbours(int y, int x)
         int y = cellsIndexes[i];
         int x = cellsIndexes[i + 1];
         
-        // Bond indexes if needed
-        if (y > height) y = 0;
-        if (y < 0) y = height;
-        
-        if (x > width) x = 0;
-        if (x < 0) x = width;
-        
         // Add to the neighbours count
-        neighbours += copied[y][x];
+        if (0 <= x && x < width && 0 <= y && y < height)
+            neighbours += copied[y][x];
     }
     
     // Return cells
@@ -153,41 +142,44 @@ void Board::doGeneration()
         sf::Vector2u& coordinates = oldCheck[i];
         int y = coordinates.y;
         int x = coordinates.x;
-        
-        int neighbours = getNeighbours(y, x);
-        int value = matrix[y][x];
-        
-        // Revive cell if conditions are favorable
-        if (value == 1 && (neighbours == 3 || neighbours == 2))
-        { 
-            value = 1;
-        }
-        
-        // Born cell if conditions are favorable
-        else if (value == 0 && neighbours == 3)
+    
+        if (0 <= x && x < width && 0 <= y && y < height)
         {
-            value = 1;
-        }
+            
+            int neighbours = getNeighbours(y, x);
+            int value = copied[y][x];
+            
+            // Revive cell if conditions are favorable
+            if (value == 1 && (neighbours == 3 || neighbours == 2))
+            { 
+                value = 1;
+            }
+            
+            // Born cell if conditions are favorable
+            else if (value == 0 && neighbours == 3)
+            {
+                value = 1;
+            }
 
-        // Kill cell by default (Overpopulation or Isolation)
-        else
-        {
-            value = 0;
+            // Kill cell by default (Overpopulation or Isolation)
+            else
+            {
+                value = 0;
+            }
+            
+            // Update value
+            matrix[y][x] = value;
+            
+            // Add to check if cell is alive
+            if (value)
+                addToCheck(y, x);
         }
-        
-        // Update value
-        matrix[y][x] = value;
-        
-        // Add to check if cell is alive
-        if (value)
-            addToCheck(y, x);
-        
     }
     
 }
 
 // Draw cells on the canvas
-void Board::drawStates()
+void Board::display()
 {
     
     // Create check if it is not created
@@ -213,13 +205,30 @@ void Board::drawStates()
             window->draw(shape);
         }
     }
-}
-
-
-// Get cell scaler without transformation
-float Board::getScaler()
-{
-    return scaler;
+    
+    // Draw board's grid lines
+    if (drawGridLines)
+    {
+        
+        // Draw vertical lines
+        gridLine.setSize(sf::Vector2f(1, height * scaler));
+        for (int x = 0; x <= width; x++)
+        {
+            sf::Vector2f position(x * scaler, 0);
+            gridLine.setPosition(position);
+            window->draw(gridLine);
+        }
+        
+        // Draw horizontal lines
+        gridLine.setSize(sf::Vector2f(width * scaler, 1));
+        for (int y = 0; y <= height; y++)
+        {
+            sf::Vector2f position(0, y * scaler);
+            gridLine.setPosition(position);
+            window->draw(gridLine);
+        }
+    }
+    
 }
 
 

@@ -2,7 +2,7 @@
 
 
 // Setup scene environement
-void SCENE_Simulation::setup(sf::RenderWindow* _window, bool& _isFocused)
+void SCENE_Simulation::setup(sf::RenderWindow* _window, bool* _isFocused)
 {
     
     window = _window;
@@ -31,7 +31,7 @@ void SCENE_Simulation::run()
     
     
     // Update camera values
-    camera.updateView(2.5, isFocused);
+    camera.updateView(2.5, *isFocused);
     camera.activate(window);
 
     
@@ -39,8 +39,8 @@ void SCENE_Simulation::run()
     if (isSimulationActive)
         board.doGeneration();
     
-    // Draw board cells
-    board.drawStates();
+    // Display board on buffer
+    board.display();
     
 }
 
@@ -50,7 +50,7 @@ void SCENE_Simulation::events(sf::Event& action)
 {
     
     // Update camera values
-    camera.updateView(action);
+    camera.updateView(action, *isFocused);
     
     // Edit simulation if it is paused
     if (!isSimulationActive)

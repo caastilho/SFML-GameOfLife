@@ -67,7 +67,7 @@ void Canvas::setupScenes()
 {
     
     // Setup "simulation" scene
-    scene_0.setup(window, isFocused);
+    scene_0.setup(window, &isFocused);
     
 }
 

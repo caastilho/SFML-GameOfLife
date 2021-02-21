@@ -66,11 +66,11 @@ void Camera2D::updateView(float offset, bool isFocused)
     
 }
 
-void Camera2D::updateView(sf::Event& action)
+void Camera2D::updateView(sf::Event& action, bool isFocused)
 {
     
     // Scale scene based on mouse wheel delta
-    if (action.type == sf::Event::MouseWheelMoved)
+    if (isFocused && action.type == sf::Event::MouseWheelMoved)
     {
         int delta = action.mouseWheel.delta;
         float zoom = getZoomValue(delta);

@@ -16,7 +16,7 @@ class SCENE_Simulation
         sf::RenderWindow* window;
         
         // Stores window focused state
-        bool isFocused;
+        bool* isFocused;
         
         
         // Simulation states
@@ -40,7 +40,7 @@ class SCENE_Simulation
 
         
         // Setup scene environement
-        void setup(sf::RenderWindow* _window, bool& _isFocused);
+        void setup(sf::RenderWindow* _window, bool* _isFocused);
         
         // Run scene environment
         void run();

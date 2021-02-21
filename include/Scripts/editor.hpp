@@ -16,6 +16,10 @@ class Editor
         sf::RenderWindow* window;
         
         
+        // Check if index is within bonderies
+        bool isInBonderies(int x, int y);
+        
+        
         // Get X, Y board position based on view and cursor X, Y
         sf::Vector2i getTruePosition(float x, float y);
         
