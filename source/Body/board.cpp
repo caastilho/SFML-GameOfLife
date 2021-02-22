@@ -10,7 +10,7 @@ Board::Board(int _width, int _height, sf::RenderWindow* _window): width(_width),
     shape.setFillColor(sf::Color(225, 225, 255));
     
     // Setup grid line attributes
-    gridLine.setFillColor(sf::Color(20, 20, 20));
+    gridLine.setFillColor(sf::Color(10, 10, 13));
     
     // Setup matrix values
     setupMatrix();

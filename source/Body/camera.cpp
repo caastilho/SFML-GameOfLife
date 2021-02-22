@@ -5,6 +5,7 @@
 Camera2D::Camera2D(int width, int height)
 {
     view.setSize(width, height);
+    view.setCenter(sf::Vector2f(width / 2.f, height / 2.f));
 }
 
 

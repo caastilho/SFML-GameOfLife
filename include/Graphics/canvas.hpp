@@ -1,8 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <vector>
-
 #include <Scenes/simulation.hpp>
+
+#include <string>
+#include <vector>
+#include <limits.h>
+#include <unistd.h>
 
 
 // Renderer environment (Canvas)
@@ -35,6 +38,10 @@ class Canvas
         
         // Setup graphical objects
         void setupObjects();
+        
+        
+        // Get "assets" directory path
+        std::string getAssetsPath();
         
         
         // Setup canvas scenes

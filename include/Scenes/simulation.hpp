@@ -5,6 +5,8 @@
 #include <Body/camera.hpp>
 #include <Scripts/editor.hpp>
 
+#include <UI/image.hpp>
+
 
 // Scene simulation
 class SCENE_Simulation
@@ -21,6 +23,13 @@ class SCENE_Simulation
         
         // Simulation states
         bool isSimulationActive = false;
+        
+        
+        // GUI window view
+        sf::View GUIview;
+        
+        // State displayer
+        Image playing, paused;
         
         
         // Simulation camera
@@ -40,7 +49,7 @@ class SCENE_Simulation
 
         
         // Setup scene environement
-        void setup(sf::RenderWindow* _window, bool* _isFocused);
+        void setup(sf::RenderWindow* _window, bool* _isFocused, std::vector<sf::Texture>& textures);
         
         // Run scene environment
         void run();

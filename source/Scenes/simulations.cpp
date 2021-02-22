@@ -2,12 +2,11 @@
 
 
 // Setup scene environement
-void SCENE_Simulation::setup(sf::RenderWindow* _window, bool* _isFocused)
+void SCENE_Simulation::setup(sf::RenderWindow* _window, bool* _isFocused, std::vector<sf::Texture>& textures)
 {
     
     window = _window;
     isFocused = _isFocused;
-    
     
     // Create camera object
     sf::Vector2u size = window->getSize();
@@ -19,6 +18,15 @@ void SCENE_Simulation::setup(sf::RenderWindow* _window, bool* _isFocused)
     // Create board editor object
     editor = Editor(&board, window);
     
+    
+    // Setup GUI view size 
+    GUIview.setSize(size.x, size.y);
+    GUIview.setCenter(sf::Vector2f(size.x / 2.f, size.y / 2.f));
+    
+    // Create states displayer (Paused or Playisn)
+    paused = Image(textures[0], 120, 85);
+    playing = Image(textures[1], 128, 85);
+    
 }
 
 
@@ -28,6 +36,7 @@ void SCENE_Simulation::run()
     
     // Clear window buffer
     window->clear(sf::Color::Black);
+    
     
     
     // Update camera values
@@ -41,6 +50,25 @@ void SCENE_Simulation::run()
     
     // Display board on buffer
     board.display();
+    
+    
+    // Draw state displayer
+    window->setView(GUIview);
+    if (isSimulationActive)
+    {
+        playing.setPosition(10, 1080 - 95);
+        playing.display(window);
+    }
+    
+    else
+    {
+        paused.setPosition(18, 1080 - 100);
+        paused.display(window);
+    }
+    
+    
+    // Reset window view
+    camera.activate(window);
     
 }
 

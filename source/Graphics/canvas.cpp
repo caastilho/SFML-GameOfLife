@@ -21,6 +21,8 @@ Canvas::Canvas(int width, int height, const char* name)
 void Canvas::run()
 {
     
+    setupObjects();
+    
     // Setup canvas scenes
     setupScenes();
     
@@ -38,9 +40,32 @@ void Canvas::run()
 
 
 
+// Get "assets" directory path
+std::string Canvas::getAssetsPath()
+{
+    // Get current working directory
+    char result[PATH_MAX];
+    size_t count = readlink("/proc/self/exe", result, PATH_MAX);
+    std::string full_path = std::string(result, (count > 0) ? count : 0);
+    
+    // Get "assets" path
+    std::string path = full_path.substr(0, full_path.size() - 7) + "assets/";
+    
+    // Return path
+    return path;
+}
+
 // Setup graphical objects
 void Canvas::setupObjects()
 {
+    
+    // Get assets path
+    std::string assets = getAssetsPath();
+    
+    
+    // Load textures objects
+    addTexture(assets + "pause_image.png");
+    addTexture(assets + "play_image.png");
     
 }
 
@@ -53,6 +78,19 @@ void Canvas::addShaders(std::string fragmented, std::string vertex)
 
 void Canvas::addTexture(std::string path)
 {
+    
+    sf::Texture texture;
+    
+    // Load texture from file or create an empty
+    if (!texture.loadFromFile(path))
+    {
+        std::cout << "Texture [" << path << "] could not be loaded.\n";
+        texture.create(200, 200); 
+    }
+    
+    // Add texture to array
+    textures.push_back(texture);
+    
 }
 
 void Canvas::addFont(std::string path)
@@ -61,13 +99,12 @@ void Canvas::addFont(std::string path)
 
 
 
-
 // Setup canvas scenes
 void Canvas::setupScenes()
 {
-    
+        
     // Setup "simulation" scene
-    scene_0.setup(window, &isFocused);
+    scene_0.setup(window, &isFocused, textures);
     
 }
 
